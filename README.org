@@ -1,6 +1,7 @@
 #+TITLE: Monorepo for Emacs packages and Spacemacs layers by @plexus
 
-* clj-ns-name
+* Packages
+** clj-ns-name
 
 Set the buffer name of Clojure buffers to the Clojure namespace name.
 
@@ -10,3 +11,14 @@ Set the buffer name of Clojure buffers to the Clojure namespace name.
    :fetcher github
    :files ("clj-ns-name/*"))
 #+END_SRC 
+
+* Layers
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'dotspacemacs-configuration-layer-path "/home/arne/github/plexmacs/layers/")
+#+END_SRC
+
+
+
+** plexus-clojure-extras
+
