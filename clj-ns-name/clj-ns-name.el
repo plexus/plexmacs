@@ -75,7 +75,7 @@
     buffer))
 
 (defun clj-ns-name-create-file-buffer-advice (cfb-fun filename &rest args)
-  (if (clj-ns-name-clojure-file-p filename)
+  (if (and (file-exists-p filename) (clj-ns-name-clojure-file-p filename))
       (let* ((ns-name (with-temp-buffer
                         (insert-file-contents filename)
                         (walkclj-current-ns))))
