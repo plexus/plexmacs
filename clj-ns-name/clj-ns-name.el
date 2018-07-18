@@ -5,7 +5,7 @@
 ;; Maintainer: Arne Brasseur <arne@arnebrasseur.net>
 ;; Created: Mi Jul 18 09:18:03 2018 (+0200)
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "24.4") (walkclj "0.1.0"))
+;; Package-Requires: ((emacs "24.4"))
 ;; Last-Updated: Mi Jul 18 09:24:11 2018 (+0200)
 ;;           By: Arne Brasseur
 ;;     Update #: 1
@@ -20,6 +20,10 @@
 ;; than the filename.
 ;;
 ;; Run `(clj-ns-name-install)' to add function advice to activate this package.
+;;
+;; Note: since walkclj is not on MELPA yet it's not being listed as a dependency
+;; here, look at the plexus-clojure-extras layer to see how to ensure all
+;; dependencies are there.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
