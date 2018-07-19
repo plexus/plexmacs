@@ -5,8 +5,8 @@
   (setq org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
 
   ;; post org-mode 9.1
-  (setq org-duration-format 'h:mm))
+  (setq org-duration-format 'h:mm)
+  )
 
 (defun plexus-defaults/post-init-projectile ()
   (setq projectile-create-missing-test-files t))
-

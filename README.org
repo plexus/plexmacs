@@ -10,7 +10,15 @@ Set the buffer name of Clojure buffers to the Clojure namespace name.
    :repo "plexus/plexmacs"
    :fetcher github
    :files ("clj-ns-name/*"))
-#+END_SRC 
+#+END_SRC
+
+** pprint-to-buffer
+
+Brings CIDER's C-c C-p to elisp
+
+** sesman-table
+
+An alternative to the now disappeared `cider-connection-browser`
 
 * Layers
 
@@ -21,4 +29,3 @@ Set the buffer name of Clojure buffers to the Clojure namespace name.
 
 
 ** plexus-clojure-extras
-

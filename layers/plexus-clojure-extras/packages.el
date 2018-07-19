@@ -42,6 +42,3 @@
   ;;   :config
   ;;   (clj-ns-name-install))
   )
-
-(defun plexus-clojure-extras/pre-init-clojure-mode ()
-  (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
