@@ -10,4 +10,4 @@
     :config
     (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'pprint-to-buffer-last-sexp))
 
-  (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
