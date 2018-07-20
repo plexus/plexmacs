@@ -1,5 +1,12 @@
 #!/bin/bash
 
+echo ===== Syncing Plexmacs repo =====
+
 git add -A
 git commit -m 'sync'
 git push
+
+echo ===== Syncing Plexmacs ELPA =====
+
+cd ../plexmacs-elpa
+./sync

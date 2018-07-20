@@ -27,6 +27,10 @@ Brings CIDER's C-c C-p to elisp
 
 An alternative to the now disappeared `cider-connection-browser`
 
+** header2
+
+Taken off the internet, automatic headers for Emacs Lisp.
+
 * Layers
 
 #+BEGIN_SRC emacs-lisp

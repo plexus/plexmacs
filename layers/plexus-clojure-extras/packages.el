@@ -6,13 +6,17 @@
 
 (defconst plexus-clojure-extras-packages
   '(clj-ns-name
-    clojure-mode))
+    clojure-mode
+    sesman-table))
 
 (defun plexus-clojure-extras/init-clj-ns-name ()
   (use-package clj-ns-name
     :config
-    (clj-ns-name-install))
-  (setq helm-buffer-max-length 40))
+    (clj-ns-name-install)
+    (setq helm-buffer-max-length 40)))
+
+(defun plexus-clojure-extras/init-sesman-table ()
+  (use-package sesman-table))
 
 (defun plexus-clojure-extras/post-init-clojure-mode ()
   (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
