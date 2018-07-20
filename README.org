@@ -6,18 +6,10 @@ Most of these packages are not on MELPA, they are my various tinkerings and expe
 (add-to-list 'package-archives '("plexmacs" . "https://plexus.github.io/plexmacs-elpa/packages/") t)
 #+END_SRC
 
-
 * Packages
 ** clj-ns-name
 
 Set the buffer name of Clojure buffers to the Clojure namespace name.
-
-#+BEGIN_SRC emacs-lisp
-  (clj-ns-name
-   :repo "plexus/plexmacs"
-   :fetcher github
-   :files ("clj-ns-name/*"))
-#+END_SRC
 
 ** pprint-to-buffer
 
