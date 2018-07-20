@@ -1,5 +1,12 @@
 #+TITLE: Monorepo for Emacs packages and Spacemacs layers by @plexus
 
+Most of these packages are not on MELPA, they are my various tinkerings and experiments. I do run a private ELPA repository for easy consumption.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'package-archives '("plexmacs" . "https://plexus.github.io/plexmacs-elpa/packages") t)
+#+END_SRC
+
+
 * Packages
 ** clj-ns-name
 
@@ -26,6 +33,8 @@ An alternative to the now disappeared `cider-connection-browser`
   (add-to-list 'dotspacemacs-configuration-layer-path "/home/arne/github/plexmacs/layers/")
 #+END_SRC
 
-
-
 ** plexus-clojure-extras
+
+- Use clj-ns-name
+- Bind < and > to slurp / barf
+- Enable aggressive indent mode in Clojure buffers
