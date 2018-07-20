@@ -3,7 +3,7 @@
 Most of these packages are not on MELPA, they are my various tinkerings and experiments. I do run a private ELPA repository for easy consumption.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'package-archives '("plexmacs" . "https://plexus.github.io/plexmacs-elpa/packages") t)
+(add-to-list 'package-archives '("plexmacs" . "https://plexus.github.io/plexmacs-elpa/packages/") t)
 #+END_SRC
 
 
