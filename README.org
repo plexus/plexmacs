@@ -54,3 +54,5 @@ Better emacs defaults.
 - Use clj-ns-name
 - Bind < and > to slurp / barf
 - Enable aggressive indent mode in Clojure buffers
+* Resources
+- [[https://github.com/noctuid/evil-guide#keybindings-and-states][evil-guide: bindings and state]] Probably the best explanation of the mess that is the evil keybinding system.

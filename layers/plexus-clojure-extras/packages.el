@@ -20,10 +20,8 @@
 
 (defun plexus-clojure-extras/post-init-clojure-mode ()
   ;; Make sure evil doesn't shadow `q' in CIDER popup buffers
-  (evil-make-intercept-map cider-popup-buffer-mode-map 'normal)
+  (add-hook 'cider-popup-buffer-mode-hook
+            (lambda ()
+              (evil-local-set-key 'normal "q" 'cider-popup-buffer-quit-function)))
 
   (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
-
-(macroexpand-1 '
- (evil-define-key 'normal cider-popup-buffer-mode-map
-   "q" 'cider-popup-buffer-quit-function))

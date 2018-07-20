@@ -74,7 +74,7 @@
       (pprint-to-buffer--eval-and-insert (elisp--preceding-sexp))
     (pprint-to-buffer--pop-to-buffer (elisp--preceding-sexp))))
 
-(define-key emacs-lisp-mode-map (kbd "C-c C-p") 'pprint-to-buffer-last-sexp)
+;; (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'pprint-to-buffer-last-sexp)
 
 (provide 'pprint-to-buffer)
 

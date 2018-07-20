@@ -6,4 +6,8 @@
   (use-package header2))
 
 (defun plexus-elisp-extras/init-pprint-to-buffer ()
-  (use-package pprint-to-buffer))
+  (use-package pprint-to-buffer
+    :config
+    (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'pprint-to-buffer-last-sexp))
+
+  (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
