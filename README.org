@@ -33,6 +33,18 @@ An alternative to the now disappeared `cider-connection-browser`
   (add-to-list 'dotspacemacs-configuration-layer-path "/home/arne/github/plexmacs/layers/")
 #+END_SRC
 
+** lambdaisland
+
+Lambda Island look and feel, and other Lambda Island specific code.
+
+** plexus-editing
+
+Various coding UX tweaks.
+
+** plexus-defaults
+
+Better emacs defaults.
+
 ** plexus-clojure-extras
 
 - Use clj-ns-name
