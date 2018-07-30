@@ -43,8 +43,55 @@
 ;;; Code:
 
 (require 'ctable)
-(require 'cider)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; borrowed from CIDER
+
+(defun sesman-table--cider-make-popup-buffer (name &optional mode ancillary)
+  "Create a temporary buffer called NAME using major MODE (if specified)."
+  (with-current-buffer (get-buffer-create name)
+    (kill-all-local-variables)
+    (setq buffer-read-only nil)
+    (erase-buffer)
+    (when mode
+      (funcall mode))
+    ;; (cider-popup-buffer-mode 1)
+    ;; (setq cider-popup-output-marker (point-marker))
+    (setq buffer-read-only t)
+    ;; (when ancillary
+    ;;   (add-to-list 'cider-ancillary-buffers name)
+    ;;   (add-hook 'kill-buffer-hook
+    ;;             (lambda ()
+    ;;               (setq cider-ancillary-buffers
+    ;;                     (remove name cider-ancillary-buffers)))
+    ;;             nil 'local))
+    (current-buffer)))
+
+(defun sesman-table--cider-popup-buffer-display (buffer &optional select)
+  "Display BUFFER.
+If SELECT is non-nil, select the BUFFER."
+  (let ((window (get-buffer-window buffer 'visible)))
+    (when window
+      (with-current-buffer buffer
+        (set-window-point window (point))))
+    ;; If the buffer we are popping up is already displayed in the selected
+    ;; window, the below `inhibit-same-window' logic will cause it to be
+    ;; displayed twice - so we early out in this case. Note that we must check
+    ;; `selected-window', as async request handlers are executed in the context
+    ;; of the current connection buffer (i.e. `current-buffer' is dynamically
+    ;; bound to that).
+    (unless (eq window (selected-window))
+      ;; Non nil `inhibit-same-window' ensures that current window is not covered
+      ;; Non nil `inhibit-switch-frame' ensures that the other frame is not selected
+      ;; if that's where the buffer is being shown.
+      (funcall (if select #'pop-to-buffer #'display-buffer)
+               buffer `(nil . ((inhibit-same-window . ,pop-up-windows)
+                               (reusable-frames . visible))))))
+  buffer)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; The ctable "component", needed in actions to look up the current selection.
 (make-variable-buffer-local '*sesman-component*)
 
 (defun sesman-table--sessions ()
@@ -52,6 +99,37 @@
    (lambda (k)
      (list* (car k) (a-get sesman-sessions-hashmap k)))
    (a-keys sesman-sessions-hashmap)))
+
+(defun sesman-table--links-table (links)
+  (let* ((buffers     (map-elt links 'buffer))
+         (directories (map-elt links 'directory))
+         (projects    (map-elt links 'project)))
+
+    (append
+     (seq-map (lambda (p) (list "" "" 'PROJECT (concat
+                                                ;;(symbol-name (car p))
+                                                ;;": "
+                                                (cdr p))) )
+              projects)
+     (seq-map (lambda (d) (list "" "" 'DIRECTORY d) ) directories)
+     (seq-map (lambda (b) (list "" ""  'BUFFER (buffer-file-name b)) ) buffers))))
+
+(defun sesman-table--repl-table (repls)
+  (seq-map (lambda (r) (list "" "" 'REPL r)) repls))
+
+(defun sesman-table--data ()
+  (apply #'append
+         (map-apply (lambda (name session)
+                      (let ((system (car name))
+                            (ses-name (cdr name)))
+
+                        (append
+                         `((,system ,ses-name SESSION ,(cider--connection-info (cadr session) t)))
+                         (sesman-table--links-table (sesman-session-links system session))
+                         (sesman-table--repl-table (cdr session)))))
+                    sesman-sessions-hashmap)))
+
+(sesman-table--data)
 
 (defun sesman-table--selected-session ()
   (let* ((row (ctbl:cp-get-selected-data-row *sesman-component*))
@@ -87,20 +165,23 @@
 
 (defun sesman-table-column-model ()
   (list (make-ctbl:cmodel
+         :title "System"
+         ;; :min-width 15
+         :align 'left)
+        (make-ctbl:cmodel
+         :title "Session"
+         ;; :min-width 20
+         :align 'left)
+        (make-ctbl:cmodel
          :title "Type"
-         :min-width 15
          :align 'left)
         (make-ctbl:cmodel
-         :title "Name"
-         :min-width 20
-         :align 'left)
-        (make-ctbl:cmodel
-         :title "Buffer"
+         :title "-"
          :align 'left)))
 
 (defun sesman-table-model ()
   (make-ctbl:model :column-model (sesman-table-column-model)
-                   :data (sesman-table--sessions)))
+                   :data (sesman-table--data)))
 
 (defun sesman-table-show ()
   (interactive)

@@ -7,7 +7,8 @@
 (defconst plexus-clojure-extras-packages
   '(clj-ns-name
     clojure-mode
-    sesman-table))
+    sesman-table
+    cider))
 
 (defun plexus-clojure-extras/init-clj-ns-name ()
   (use-package clj-ns-name
@@ -26,3 +27,15 @@
 
   (setq cider-repl-pop-to-buffer-on-connect t)
   (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
+
+(defun plexus-clojure-extras/post-init-cider ()
+  (dolist (m '(clojure-mode
+               clojurec-mode
+               clojurescript-mode
+               clojurex-mode
+               cider-repl-mode
+               cider-clojure-interaction-mode))
+
+    (spacemacs/set-leader-keys-for-major-mode m
+      "ep" 'cider-pprint-eval-last-sexp
+      "eP" 'cider-pprint-eval-last-sexp-to-comment)))
