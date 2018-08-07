@@ -17,8 +17,7 @@
     (setq helm-buffer-max-length 40)))
 
 (defun plexus-clojure-extras/init-sesman-table ()
-  (use-package sesman-table)
-  )
+  (use-package sesman-table))
 
 (defun plexus-clojure-extras/post-init-clojure-mode ()
   ;; Make sure evil doesn't shadow `q' in CIDER popup buffers

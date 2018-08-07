@@ -10,3 +10,5 @@ echo ===== Syncing Plexmacs ELPA =====
 
 cd ../plexmacs-elpa
 ./sync
+
+emacsclient -e '(auto-package-update-now)'
