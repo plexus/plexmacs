@@ -59,12 +59,19 @@
   (spacemacs/toggle-vi-tilde-fringe-off)
   (centered-cursor-mode)
   (git-gutter+-in-all-buffers (git-gutter+-turn-off))
-  (when global-git-gutter+-mode
-    (global-git-gutter+-mode))
-  ;;(when highlight-parentheses-mode
-  ;;  (highlight-parentheses-mode))
-  ;;(when show-paren-mode
-  ;;  (show-paren-mode))
+
+  (setq cider-use-fringe-indicators nil)
+  ;; (when global-git-gutter+-mode
+  ;;   (global-git-gutter+-mode))
+  (when highlight-parentheses-mode
+    (highlight-parentheses-mode -1))
+  (when show-paren-mode
+    (show-paren-mode -1))
+  (when show-smartparens-mode
+    (show-smartparens-mode -1))
+
+
+  (setq dotspacemacs-highlight-delimiters nil)
   )
 
 ;;(setq mode-line-format '("%e" (:propertize "    Lambda Island | 37. Transducers" font-lock-face (:foreground "#b294bb"))))
