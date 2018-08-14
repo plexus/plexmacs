@@ -50,28 +50,28 @@
                            "   "
                            mode-line-position)))
 
+;; also disable blinking in gnome-terminal:
+;; gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$(gsettings get org.gnome.Terminal.ProfilesList default|tr -d \')/ cursor-blink-mode off
 (defun plexus/screencast-mode ()
   (interactive)
   (plexus/minimal-decorations)
-  (blink-cursor-mode 0)
-  (setq indicate-empty-lines nil)
   (set-frame-parameter nil 'left-fringe 18)
   (spacemacs/toggle-vi-tilde-fringe-off)
   (centered-cursor-mode)
-  (git-gutter+-in-all-buffers (git-gutter+-turn-off))
 
   (setq cider-use-fringe-indicators nil)
-  ;; (when global-git-gutter+-mode
-  ;;   (global-git-gutter+-mode))
-  (when highlight-parentheses-mode
-    (highlight-parentheses-mode -1))
-  (when show-paren-mode
-    (show-paren-mode -1))
-  (when show-smartparens-mode
-    (show-smartparens-mode -1))
-
-
   (setq dotspacemacs-highlight-delimiters nil)
+  (setq indicate-empty-lines nil)
+
+  (blink-cursor-mode -1)
+  (global-git-gutter+-mode -1)
+  ;;(git-gutter+-in-all-buffers (git-gutter+-turn-off))
+  (highlight-parentheses-mode -1)
+  (show-paren-mode -1)
+  (show-smartparens-mode -1)
+  (which-key-mode -1)
+
+  (remove-hook 'before-save-hook #'delete-trailing-whitespace)
   )
 
 ;;(setq mode-line-format '("%e" (:propertize "    Lambda Island | 37. Transducers" font-lock-face (:foreground "#b294bb"))))
