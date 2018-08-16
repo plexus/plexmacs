@@ -126,11 +126,9 @@ If SELECT is non-nil, select the BUFFER."
 
                         (append
                          `((,system ,ses-name SESSION ,(cider--connection-info (cadr session) t)))
-                         (sesman-table--links-table (sesman-session-links system session))
+                         (sesman-table--links-table (sesman-current-links system session))
                          (sesman-table--repl-table (cdr session)))))
                     sesman-sessions-hashmap)))
-
-(sesman-table--data)
 
 (defun sesman-table--selected-session ()
   (let* ((row (ctbl:cp-get-selected-data-row *sesman-component*))
@@ -142,9 +140,11 @@ If SELECT is non-nil, select the BUFFER."
   (interactive)
   (let* ((row (ctbl:cp-get-selected-data-row *sesman-component*))
          (system (cl-first row))
-         (session (cl-third row)))
+         (session (cl-third row))
+         (repl (cl-second (sesman-table--selected-session))))
     (sesman-unregister system (sesman-table--selected-session))
     (sesman-quit-session system (sesman-table--selected-session))
+    (kill-buffer repl)
     (ctbl:cp-set-model *sesman-component* (sesman-table-model))))
 
 (defun sesman-table-next ()
@@ -186,7 +186,8 @@ If SELECT is non-nil, select the BUFFER."
 
 (defun sesman-table-show ()
   (interactive)
-  (let* ((buffer (sesman-table--cider-make-popup-buffer "*sesman-connections*"))
+  (let* ((buffer ;;(sesman-table--cider-make-popup-buffer "*sesman-connections*")
+          (cider-make-popup-buffer "*sesman-connections*"))
          (component (ctbl:create-table-component-buffer
                      :buffer buffer
                      :model (sesman-table-model)
@@ -197,7 +198,9 @@ If SELECT is non-nil, select the BUFFER."
       (mapc (lambda (k)
               (evil-local-set-key 'normal `[,(car k)] (cdr k)))
             (cdr sesman-table-keymap)))
-    (sesman-table--cider-popup-buffer-display buffer t)))
+    ;; (sesman-table--cider-popup-buffer-display buffer t)
+    (cider-popup-buffer-display buffer t)
+    ))
 
 (provide 'sesman-table)
 

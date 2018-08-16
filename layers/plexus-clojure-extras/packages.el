@@ -25,7 +25,7 @@
             (lambda ()
               (evil-local-set-key 'normal "q" 'cider-popup-buffer-quit-function)))
 
-  (setq cider-repl-pop-to-buffer-on-connect t)
+  (setq cider-repl-pop-to-buffer-on-connect nil)
   (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
 
 (defun plexus-clojure-extras/post-init-cider ()
