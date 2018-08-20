@@ -8,13 +8,22 @@
   '(clj-ns-name
     clojure-mode
     sesman-table
-    cider))
+    cider
+    html-to-hiccup))
+
+(defun plexus-clojure-extras-around-cider-find-file (cider-find-file-fn url)
+  (let ((result (funcall cider-find-file-fn url)))
+    ;;(clj-ns-name-rename-clj-buffer-to-namespace*)
+    result))
 
 (defun plexus-clojure-extras/init-clj-ns-name ()
   (use-package clj-ns-name
     :config
     (clj-ns-name-install)
-    (setq helm-buffer-max-length 40)))
+    (setq helm-buffer-max-length 40)
+
+    (advice-add 'cider-find-file :around #'plexus-clojure-extras-around-cider-find-file)
+    ))
 
 (defun plexus-clojure-extras/init-sesman-table ()
   (use-package sesman-table))
@@ -39,3 +48,6 @@
     (spacemacs/set-leader-keys-for-major-mode m
       "ep" 'cider-pprint-eval-last-sexp
       "eP" 'cider-pprint-eval-last-sexp-to-comment)))
+
+(defun plexus-clojure-extras/init-html-to-hiccup ()
+  (use-package html-to-hiccup))
