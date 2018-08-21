@@ -1,0 +1,12 @@
+(defun plexus-clojure-extras/around-cider-find-file (cider-find-file-fn url)
+  (let ((result (funcall cider-find-file-fn url)))
+    ;;(clj-ns-name-rename-clj-buffer-to-namespace*)
+    result))
+
+(defun plexus-clojure-extras/around-cider-find-var (fn &rest args)
+  (let* ((sess (sesman-current-session 'CIDER))
+         (orig-buf (current-buffer))
+         (result (apply fn args)))
+    (unless (eq orig-buf (current-buffer))
+      (sesman-link-with-buffer (current-buffer) sess))
+    result))
