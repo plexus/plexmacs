@@ -1,5 +1,4 @@
-(defconst plexus-org-tweaks-packages '(org
-                                       ox-gfm))
+(defconst plexus-org-tweaks-packages '(org))
 
 (defun plexus-org-tweaks/post-init-org ()
   (spacemacs|use-package-add-hook org
@@ -14,6 +13,3 @@
     (add-hook 'org-mode-hook
               #'spacemacs/toggle-auto-completion-off
               'append)))
-
-(defun plexus-org-tweaks/init-ox-gfm ()
-  (use-package ox-gfm))

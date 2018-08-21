@@ -8,4 +8,5 @@
 (defun lambdaisland/init-color-theme-sanityinc-tomorrow ()
   (use-package color-theme-sanityinc-tomorrow
     :config
+    (setq custom-safe-themes t)
     (color-theme-sanityinc-tomorrow-night)))
