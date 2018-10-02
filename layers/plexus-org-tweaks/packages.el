@@ -9,6 +9,9 @@
     ;; post org-mode 9.1
     (setq org-duration-format 'h:mm)
 
+    (org-babel-do-load-languages 'org-babel-load-languages
+                                 '((shell . t)))
+    
     ;; Please no auto complete when I'm writing text
     (add-hook 'org-mode-hook
               #'spacemacs/toggle-auto-completion-off

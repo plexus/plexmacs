@@ -29,7 +29,11 @@
               (evil-local-set-key 'normal "q" 'cider-popup-buffer-quit-function)))
 
   (setq cider-repl-pop-to-buffer-on-connect nil)
-  (add-hook 'clojure-mode-hook #'aggressive-indent-mode))
+  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+
+  (require 'clojure-mode)
+  (define-clojure-indent
+    (match 1)))
 
 (defun plexus-clojure-extras/post-init-cider ()
   (dolist (m '(clojure-mode
@@ -43,7 +47,9 @@
       "ep" 'cider-pprint-eval-last-sexp
       "eP" 'cider-pprint-eval-last-sexp-to-comment))
 
-  (advice-add #'cider-find-var :around #'plexus-clojure-extras/around-cider-find-var))
+  ;; todo, move to a clj-refactor stanza
+  (setq cljr-warn-on-eval nil)
+  (setq cljr-eagerly-build-asts-on-startup nil))
 
 (defun plexus-clojure-extras/init-html-to-hiccup ()
   (use-package html-to-hiccup))
