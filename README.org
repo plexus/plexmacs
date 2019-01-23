@@ -23,6 +23,10 @@ An alternative to the now disappeared `cider-connection-browser`
 
 Taken off the internet, automatic headers for Emacs Lisp.
 
+** emybar
+
+Like Anybar, but for Emacs.
+
 * Layers
 
 #+BEGIN_SRC emacs-lisp

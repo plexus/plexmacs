@@ -41,6 +41,7 @@
   (setf (cdr (assoc port emybar-colors)) color)
   (force-mode-line-update :all))
 
+;; TODO: question, exclamation, quit
 (defun emybar-filter (proc color)
   "Process filter
 
