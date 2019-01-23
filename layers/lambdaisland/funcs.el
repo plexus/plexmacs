@@ -11,8 +11,10 @@
                                                        ('recording "red")
                                                        (t "gray"))
                                                     :background "black"))
-    (:propertize " 🎥 " font-lock-face (:background ,(if plexus/record-video "green" "black") :foreground "white"))
-    (:propertize " 🔊 " font-lock-face (:background ,(if plexus/record-audio "red" "black") :foreground "white"))
+    ;;(:propertize " 🎥 " font-lock-face (:background ,(if plexus/record-video "green" "black") :foreground "white"))
+    ;;(:propertize " 🔊 " font-lock-face (:background ,(if plexus/record-audio "red" "black") :foreground "white"))
+    (:propertize " V " font-lock-face (:background ,(if plexus/record-video "green" "black") :foreground "white"))
+    (:propertize " A " font-lock-face (:background ,(if plexus/record-audio "red" "black") :foreground "white"))
     (:propertize " " font-lock-face (:background "white" :foreground "black"))
     (:propertize (:eval plexus/record-counter) font-lock-face (:background "white" :foreground "black"))
     (:propertize " " font-lock-face (:background "white" :foreground "black"))
@@ -25,8 +27,11 @@
                   (list (make-frame '((name . "islandmacs"))))))
 
 (defun plexus/resize-for-lambda-island ()
+  (interactive)
   (setq frame-resize-pixelwise t)
-  (set-frame-width (selected-frame) 1265 nil t)
+  ;; while true; do xdotool getactivewindow ; sleep 1; done
+  ;; watch "xwininfo -id 12583570 | egrep '(Width|Height)'"
+  (set-frame-width (selected-frame) 1254 nil t)
   (set-frame-height (selected-frame) 720 nil t))
 
 (defun plexus/ffmpeg-position ()
@@ -55,13 +60,14 @@
 (defun plexus/screencast-mode ()
   (interactive)
   (plexus/minimal-decorations)
-  (set-frame-parameter nil 'left-fringe 18)
+  (set-frame-parameter nil 'left-fringe 10)
   (spacemacs/toggle-vi-tilde-fringe-off)
   (centered-cursor-mode)
 
   (setq cider-use-fringe-indicators nil)
   (setq dotspacemacs-highlight-delimiters nil)
   (setq indicate-empty-lines nil)
+  (setq ccm-vpos-init 19)
 
   (blink-cursor-mode -1)
   (global-git-gutter+-mode -1)
@@ -70,6 +76,7 @@
   (show-paren-mode -1)
   (show-smartparens-mode -1)
   (which-key-mode -1)
+  (company-mode -1)
 
   (remove-hook 'before-save-hook #'delete-trailing-whitespace)
   )

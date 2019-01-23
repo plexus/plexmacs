@@ -4,11 +4,10 @@
     multiple-cursors))
 
 (defun plexus-editing/init-string-edit ()
-  (use-package string-edit :ensure t))
+  (use-package string-edit))
 
 (defun plexus-editing/init-multiple-cursors ()
   (use-package multiple-cursors
-    :ensure t
     :config
     (global-set-key (kbd "C->") #'mc/mark-next-like-this)))
 
