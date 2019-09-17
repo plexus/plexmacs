@@ -31,7 +31,7 @@
   (setq frame-resize-pixelwise t)
   ;; while true; do xdotool getactivewindow ; sleep 1; done
   ;; watch "xwininfo -id 12583570 | egrep '(Width|Height)'"
-  (set-frame-width (selected-frame) 1254 nil t)
+  (set-frame-width (selected-frame) 1262 nil t)
   (set-frame-height (selected-frame) 720 nil t))
 
 (defun plexus/ffmpeg-position ()
