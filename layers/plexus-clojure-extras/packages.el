@@ -29,13 +29,34 @@
             (lambda ()
               (evil-local-set-key 'normal "q" 'cider-popup-buffer-quit-function)))
 
-  (setq cider-repl-pop-to-buffer-on-connect nil)
   (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
   (require 'clojure-mode)
+
+  (setq clojure-toplevel-inside-comment-form t)
+
   (define-clojure-indent
+    (DELETE 2)
+    (GET 2)
+    (POST 2)
+    (PUT 2)
+    (assoc 0)
+    (async nil)
+    (at 1)
+    (await 1)
+    (case-of 2)
+    (catch-pg-key-error 1)
+    (context 2)
+    (defplugin '(1 :form (1)))
+    (element 2)
+    (ex-info 0)
+    (filter-routes 1)
+    (handle-pg-key-error 2)
+    (js/React.createElement 2)
     (match 1)
-    (defplugin '(1 :form (1)))))
+    (promise 1)
+    (prop/for-all 1)
+    (s/fdef 1)))
 
 (defun plexus-clojure-extras/post-init-cider ()
   (dolist (m '(clojure-mode
@@ -54,63 +75,62 @@
       "lp" 'sesman-link-with-project
       "lb" 'sesman-link-with-buffer
       "lb" 'sesman-link-with-directory
-      "ll" 'sesman-link-with-least-specific))
-
-  ;; todo, move to a clj-refactor stanza
-  (setq cljr-warn-on-eval nil)
-  (setq cljr-eagerly-build-asts-on-startup nil)
+      "ll" 'sesman-link-with-least-specific
+      "ss" (if (eq m 'cider-repl-mode)
+               'cider-switch-to-last-clojure-buffer
+             'cider-switch-to-repl-buffer)
+      "'"  'cider-jack-in-clj
+      "\"" 'cider-jack-in-cljs
+      "\&" 'cider-jack-in-clj&cljs
+      "sq" 'cider-quit
+      ))
 
   (require 'cider)
 
-  (define-clojure-indent
-    (GET 2)
-    (POST 2)
-    (PUT 2)
-    (DELETE 2)
-    (context 2)
-    (case-of 2)
-    (js/React.createElement 2)
-    (element 2)
-    (s/fdef 1)
-    (filter-routes 1)
-    (catch-pg-key-error 1)
-    (handle-pg-key-error 2)
-    (prop/for-all 1)
-    (at 1)
-    (promise 1)
-    (await 1)
-    (async 0))
-
-  (put 'cider-jack-in-lein-plugins 'safe-local-variable
-       #'listp)
-
-  (put 'cider-latest-middleware-version 'safe-local-variable
-       #'stringp)
+  (setq cider-redirect-server-output-to-repl t)
+  (setq cider-repl-display-help-banner nil)
+  (setq cider-repl-pop-to-buffer-on-connect nil)
 
   (require 'clj-refactor)
-  ;; (setq cider-jack-in-lein-plugins
-  ;;       ;; https://clojars.org/refactor-nrepl
-  ;;       ;; https://clojars.org/refactor-nrepl
-  ;;       '(("refactor-nrepl" "2.4.1-SNAPSHOT" :predicate cljr--inject-middleware-p)
-  ;;         ;;("cider/cider-nrepl" "0.20.1-SNAPSHOT")
-  ;;         ))
 
-  ;; (defun cljr--version (&optional remove-package-version)
-  ;;   "2.4.1-SNAPSHOT")
+  (setq cljr-cljc-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]")
+  (setq cljr-cljs-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]")
+  (setq cljr-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]")
+  (setq cljr-eagerly-build-asts-on-startup nil)
+  (setq cljr-warn-on-eval nil)
 
-  (defcustom cider-configured-cljs-init-form
-    "(throw (Exception. \"set cider-configured-cljs-init-form in .dir-locals.el\"))"
-    "The form to use to initialize a CLJS repl of type 'configured"
-    :type 'string
-    :group 'cider
-    :safe #'stringp)
+  (put 'cider-jack-in-lein-plugins 'safe-local-variable #'listp)
+  (put 'cider-latest-middleware-version 'safe-local-variable #'stringp)
 
-  (defun plexus/cider-configured-cljs-init-form ()
-    cider-configured-cljs-init-form)
+  (defun cljr--add-test-declarations ()
+    (save-excursion
+      (let* ((ns (clojure-find-ns))
+             (source-ns (cljr--find-source-ns-of-test-ns ns (buffer-file-name))))
+        (cljr--insert-in-ns ":require")
 
-  (cider-register-cljs-repl-type 'configured
-                                 #'plexus/cider-configured-cljs-init-form)
-  )
+        ;; This bit is different, pick an alias based on the ns name
+        (when source-ns
+          (insert "[" source-ns " :as " (replace-regexp-in-string ".*\\." "" source-ns) "]"))
+
+        (cljr--insert-in-ns ":require")
+        (insert (cond
+                 ((cljr--project-depends-on-p "midje")
+                  cljr-midje-test-declaration)
+                 ((cljr--project-depends-on-p "expectations")
+                  cljr-expectations-test-declaration)
+                 ((cljr--cljs-file-p)
+                  cljr-cljs-clojure-test-declaration)
+                 ((cljr--cljc-file-p)
+                  cljr-cljc-clojure-test-declaration)
+                 (t cljr-clojure-test-declaration))))
+      (indent-region (point-min) (point-max))))
+
+  ;; automatically reuse cider repl buffers without prompting
+  ;; Thanks @kommen
+  (defadvice cider--choose-reusable-repl-buffer (around auto-confirm compile activate)
+    (cl-letf (((symbol-function 'y-or-n-p) (lambda (&rest args) t))
+              ((symbol-function 'completing-read) (lambda (prompt collection &rest args) (car collection))))
+      ad-do-it)))
 
 (defun plexus-clojure-extras/init-html-to-hiccup ()
   (use-package html-to-hiccup))
