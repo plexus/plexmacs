@@ -7,7 +7,6 @@
 (defconst plexus-clojure-extras-packages
   '(clj-ns-name
     clojure-mode
-    sesman-table
     cider
     html-to-hiccup))
 
@@ -19,9 +18,6 @@
     (setq helm-buffer-max-length 40)
 
     (advice-add #'cider-find-file :around #'plexus-clojure-extras/around-cider-find-file)))
-
-(defun plexus-clojure-extras/init-sesman-table ()
-  (use-package sesman-table))
 
 (defun plexus-clojure-extras/post-init-clojure-mode ()
   ;; Make sure evil doesn't shadow `q' in CIDER popup buffers
