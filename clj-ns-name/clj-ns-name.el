@@ -4,11 +4,8 @@
 ;; Author: Arne Brasseur <arne@arnebrasseur.net>
 ;; Maintainer: Arne Brasseur <arne@arnebrasseur.net>
 ;; Created: Mi Jul 18 09:18:03 2018 (+0200)
-;; Version: 0.1.1
-;; Package-Requires: ((emacs "24.4") (walkclj "0.1.0"))
-;; Last-Updated: Mi Jul 18 09:24:11 2018 (+0200)
-;;           By: Arne Brasseur
-;;     Update #: 1
+;; Version: 0.2.1
+;; Package-Requires: ((emacs "24.4") (walkclj "0.1.0") (projectile "2.0.0"))
 ;; URL: https://github.com/plexus/plexmacs
 ;; Keywords: languages
 ;;
@@ -51,10 +48,14 @@
 ;;; Code:
 
 (require 'walkclj)
+(require 'projectile)
+
+(defun clj-ns-name-uniquify (ns-name)
+  (concat ns-name " <" (projectile-project-name) ">"))
 
 (defun clj-ns-name-rename-clj-buffer-to-namespace* ()
   (when (derived-mode-p 'clojure-mode)
-    (let* ((ns-name (walkclj-current-ns)))
+    (let* ((ns-name (clj-ns-name-uniquify (walkclj-current-ns))))
       (when (and ns-name (not (equal (buffer-name) ns-name)))
         (rename-buffer ns-name t)))))
 
