@@ -51,7 +51,8 @@
 (require 'projectile)
 
 (defun clj-ns-name-uniquify (ns-name)
-  (concat ns-name " <" (projectile-project-name) ">"))
+  (when ns-name
+    (concat ns-name " <" (projectile-project-name) ">")))
 
 (defun clj-ns-name-rename-clj-buffer-to-namespace* ()
   (when (derived-mode-p 'clojure-mode)
