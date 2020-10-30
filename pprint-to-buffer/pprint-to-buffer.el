@@ -64,13 +64,18 @@
     (goto-char pos)
     (cl--do-prettyprint)))
 
+(defun pprint-to-buffer-last-sexp-to-current-buffer ()
+  "Evaluate the sexp preceding point and pprint its value into the current buffer."
+  (interactive)
+  (pprint-to-buffer--eval-and-insert (elisp--preceding-sexp)))
+
 (defun pprint-to-buffer-last-sexp (&optional output-to-current-buffer)
   "Evaluate the sexp preceding point and pprint its value.
   If invoked with OUTPUT-TO-CURRENT-BUFFER, insert as comment in the current
   buffer, else display in a popup buffer."
   (interactive "P")
   (if output-to-current-buffer
-      (pprint-to-buffer--eval-and-insert (elisp--preceding-sexp))
+      (pprint-to-buffer-last-sexp-to-current-buffer)
     (pprint-to-buffer--pop-to-buffer (elisp--preceding-sexp))))
 
 ;; (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'pprint-to-buffer-last-sexp)
